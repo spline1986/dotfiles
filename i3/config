@@ -135,6 +135,8 @@ bindsym Mod4+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 bindsym Mod4+c exec xdotool mousemove 1366 768
 bindsym Mod4+e move absolute position center
 bindsym Mod4+Shift+m exec ~/.i3/menu.sh
+bindsym Mod4+Shift+t exec ~/.i3/set_title.sh
+bindsym Mod4+Shift+G exec ~/.i3/select_window.sh
 bindsym Mod4+Shift+o exec i3lock -c "#000000"
 bindsym XF86MonBrightnessDown exec sudo brightnessctl s 1%-
 bindsym XF86MonBrightnessUp exec sudo brightnessctl s +1%
