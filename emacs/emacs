@@ -1,0 +1,429 @@
+;;;
+;;; Add load paths
+;;;
+(add-to-list 'load-path "~/.emacs.d/site-lisp")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/auto-complete")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/jabber")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/fb2-mode")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/telega.el")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/lua-mode")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/php-mode")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/slime")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/emms")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/go-mode/")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/ledger")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/pdf-tools")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/tablist")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/company-mode")
+(add-to-list 'load-path "~/.emacs.d/themes/solarized")
+
+(require 'company)
+
+(load-file "~/.emacs.d/muse-rc.el")
+
+;;;
+;;; Appearance
+;;;
+;; Disable GUI components
+
+(tooltip-mode      -1)
+(menu-bar-mode     -1) ; disable menu-bar
+(tool-bar-mode     -1) ; disable tool-bar
+(scroll-bar-mode   -1) ; disable scroll-bar
+(blink-cursor-mode -1) ; disable cursor blink
+(global-hl-line-mode +1)
+(setq use-dialog-box nil) ; disable gui dialogs
+(setq redisplay-dont-pause t) ; better buffer draw
+(setq ring-bell-function 'ignore) ; disable bell
+(setq inhibit-splash-screen   t) ; disable splash screen
+(setq ingibit-startup-message t) ; disable startup message
+(setq frame-title-format "GNU Emacs: %b") ; display the name of the current buffer in the title bar
+(show-paren-mode t) ;; paren highlignt
+(global-visual-line-mode t)
+(setq column-number-mode t)
+(setq default-tab-width 4)
+
+(defun fringe-toggle ()
+  (interactive)
+  (if (get 'fringe-toggle 'state)
+      (progn
+		(fringe-mode nil)
+		(put 'fringe-toggle 'state nil))
+    (progn 
+	  (fringe-mode (cons (/ (window-pixel-width) 6)
+						 (/ (window-pixel-width) 6)   
+						 ))
+	  (put 'fringe-toggle 'state t))))
+
+;; Display current time in modeline
+;(setq display-time-string-forms
+;      '((propertize (concat "[" 24-hours ":" minutes "]"))))
+;(display-time-mode 1)
+
+;; Load and set solarized color theme
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/solarized")
+(load-theme 'solarized-dark t)
+
+;; Set font
+(set-default-font "Iosevka-12")
+
+;;;
+;;; Personal information
+;;;
+;; Set user name and email
+(setq user-full-name   "Andrew Lobanov")
+(setq user-mail-adress "spline@rooker.ru")
+
+(require 'auto-complete)
+;;;
+;;; Programming modes
+;;;
+(require 'lua-mode)
+(add-hook 'lua-mode-hook 'auto-complete-mode)
+(require 'php-mode)
+
+;;;
+;;; Python-mode hook
+;;;
+(add-hook 'python-mode-hook 'auto-complete-mode)
+
+;;;
+;;; SLIME
+;;;
+(require 'slime)
+(setq inferior-lisp-program "/usr/bin/sbcl")
+(setq slime-contribs '(slime-fancy))
+
+;;;
+;;; Other
+;;;
+(delete-selection-mode t) ; delete selection by input new character
+
+;; Disable backup/autosave files
+(setq make-backup-files        nil)
+(setq auto-save-default        nil)
+(setq auto-save-list-file-name nil)
+
+;; Clipboard settings
+(setq x-select-enable-clipboard t)
+
+;;;
+;;; EMMS
+;;;
+(require 'emms-setup)
+(require 'emms-volume)
+(require 'emms-player-simple)
+(require 'emms-stream-info)
+(require 'emms-player-mplayer)
+(emms-all)
+(setq emms-mode-line-format "")
+(emms-playing-time-enable-display)
+(define-emms-simple-player xmp '(file)
+  (regexp-opt '(".AMF" ".ADSC" ".669" ".DIGI" ".DBM" ".MDL" ".PSM" ".FAR"
+		".FT" ".XM" ".GMC" ".IMF" ".IT" ".LIQ" ".MTM" ".NTP"
+		".MMD0" ".MMD1" ".MMD2" ".MMD3" ".OKTA"	".PTM" ".MOD"
+		".PT36" ".EMOD" ".RTM" ".STM" ".S3M" ".SFX" ".ST26" ".ULT"
+		".amf" ".adsc" ".digi" ".dbm" ".mdl" ".psm" ".far"
+		".ft" ".xm" ".gmc" ".imf" ".it" ".liq" ".mtm" ".ntp"
+		".mmd0" ".mmd1" ".mmd2" ".mmd3" ".okta"	".ptm" ".mod"
+		".pt36" ".emod" ".rtm" ".stm" ".s3m" ".sfx" ".st26" ".ult")) "xmp" "-q")
+(define-emms-simple-player zxtune123 '(file)
+  (regexp-opt '(".pt3" ".PT3" ".ay" ".AY" ".stp" ".STP" ".stc" ".STC"
+				".stp1" ".STP1"	".pt2" ".PT2")) "zxtune123" "--silent")
+(define-emms-simple-player sidplay '(file)
+  (regexp-opt '(".SID" ".sid")) "sidplayfp" "-q")
+;(define-emms-simple-player mpg '(file)
+;  (regexp-opt '(".mp3" ".MP3")) "mpg123" "-q" "-b" "2048")
+;(define-emms-simple-player ogg '(file)
+;  (regexp-opt '(".ogg" ".OGG")) "ogg123" "-q")
+(define-emms-simple-player fluid '(file)
+  (regexp-opt '(".mid" ".MID")) "fluidsynth" "-z" "65535" "-i" "-a" "pulseaudio" "-o" "audio.alsa.device" "~/audio/Timbres Of Heaven GM_GS_XG_SFX V 3.4 Final.sf2")
+(setq emms-player-list '(emms-player-xmp
+						 emms-player-zxtune123
+						 emms-player-sidplay
+;						 emms-player-mpg
+;						 emms-player-ogg
+						 emms-player-mplayer
+						 emms-player-fluid))
+(setq emms-volume-amixer-control "Master")
+(setq emms-stream-info-backend 'mplayer)
+(setq emms-stream-default-action "play")
+
+(require 'emms-info-libtag)
+(setq emms-info-functions '(emms-info-libtag))
+
+;;;
+;;; jabber.el
+;;;
+(require 'jabber)
+(setq jabber-account-list
+      '(("spline1986@jabber.ru/Notebook"
+	 (:password . "zonycxyv")
+	 (:network-server . "jabber.ru")
+	 (:port . 5222))))
+(setq jabber-vcard-avatars-retrieve nil)
+(setq jabber-chat-fill-long-lines nil)
+(setq jabber-chat-buffer-format "*%n*")
+(setq jabber-groupchat-buffer-format "*%n*")
+(setq jabber-history-enabled t)
+(setq jabber-history-muc-enabled t)
+(setq jabber-muc-completion-delimiter ", ")
+(require 'jabber-keepalive)
+(add-hook 'jabber-post-connect-hooks 'jabber-keepalive-start)
+(add-hook 'jabber-chat-mode-hook 'flyspell-mode)
+
+;;;
+;;; ERC configuration
+;;;
+;; Set fill column by window width
+(add-hook 'window-configuration-change-hook 
+	  '(lambda ()
+	     (setq erc-fill-column (- (window-width) 2))))
+
+;; Timestamp and long lines indentk
+(setq erc-timestamp-only-if-changed-flag nil
+      erc-timestamp-format "[%H:%M] "
+      erc-fill-prefix "         "
+      erc-insert-timestamp-function 'erc-insert-timestamp-left)
+
+;; Delete service messages
+(defun my-reformat-jabber-backlog ()
+  "Fix \"unkown participant\" backlog messages from bitlbee."
+  (save-excursion
+    (goto-char (point-min))
+    (if (looking-at
+    	 "^<root> Message from unknown participant \\([^:]+\\):")
+    	(replace-match "<\\1>"))))
+
+;; Open new chats in new buffers
+(setq erc-auto-query (quote bury))
+(setq erc-query-display 'burry)
+
+;; Set prompt
+(setq erc-prompt ">")
+
+;; Load modules
+(setq erc-modules
+      (quote
+       (autojoin button completion fill irccontrols keep-place list log match menu move-to-prompt netsplit networks noncommands readonly ring stamp track)))
+
+;; Other settings
+(setq erc-log-channels-directory "~/.irclog/")
+(setq erc-log-file-coding-system 'utf-8)
+(setq erc-server "localhost")
+(add-hook 'erc-join-hook 'flyspell-mode)
+
+
+;;;
+;;; Telega.el
+;;;
+(setq max-lisp-eval-depth 10000)
+(require 'telega)
+(setq telega-use-tracking nil)
+(setq telega-avatar-factors '(0.0 . 0.0))
+(setq telega-sticker-size '(9 . 24))
+(setq telega-chat-fill-column 70)
+(setq telega-proxies
+      (list
+       '(:server "127.0.0.1" :port 9050 :enable t
+                 :type (:@type "proxyTypeSocks5"))))
+(add-hook 'telega-chat-mode-hook
+          (lambda ()
+            (set (make-local-variable 'company-backends)
+                 (append '(telega-company-username
+                           telega-company-hashtag)
+                         (when (telega-chat-bot-p telega-chatbuf--chat)
+                           '(telega-company-botcmd))))
+            (company-mode 1)))
+
+;;;
+;;; FB2-mode
+;;;
+(require 'fb2-mode)
+
+;;;
+;;; Modes
+;;;
+;; Dired
+;; Key bindings
+(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
+
+; Directories first sorting
+(defun mydired-sort ()
+  "Sort dired listings with directories first."
+  (save-excursion
+    (let (buffer-read-only)
+      (forward-line 2) ; beyond dir. header 
+      (sort-regexp-fields t "^.*$" "[ ]*." (point) (point-max)))
+    (set-buffer-modified-p nil)))
+
+(defadvice dired-readin
+  (after dired-after-updating-hook first () activate)
+  "Sort dired listings with directories first before adding marks."
+  (mydired-sort))
+
+(setq dired-listing-switches "-lkh") ; human readable filesize
+(setq dired-recursive-deletes 'top) ; delete non-empty directories
+
+
+;;;
+;;; Stardict
+;;;
+(require 'showtip)
+(require 'sdcv)
+
+
+;;;
+;;; Doc-view mode configuration
+;;;
+(setq doc-view-resolution 600)
+(setq doc-view-cache-directory "~/.emacs.d/docview")
+
+;; insert unicode characters
+(defun insert-stress ()
+  (interactive)
+  (insert-char #x0301))
+
+(defun insert-mdash ()
+  (interactive)
+  (insert-char #x2014))
+
+(defun insert-three-dots ()
+  (interactive)
+  (insert-char #x2026))
+
+;;;
+;;; Keybindings
+;;;
+(global-set-key (kbd "<f7>") 'fringe-toggle)
+(global-set-key (kbd "<f8>") 'display-line-numbers-mode)
+(global-set-key (kbd "<f9>") 'emms)
+
+;; Insert unicode characters
+(global-set-key (kbd "C-=") 'insert-stress)
+(global-set-key (kbd "C--") 'insert-mdash)
+(global-set-key (kbd "C-x C-.") 'insert-three-dots)
+
+;; Emms key bindings
+(global-set-key (kbd "C-x p") 'emms-pause)
+(global-set-key (kbd "C-<") 'emms-volume-lower)
+(global-set-key (kbd "C->") 'emms-volume-raise)
+
+;; *EMMS Playlist* key bindings
+(define-key emms-playlist-mode-map (kbd "SPC") 'emms-pause)
+(define-key emms-playlist-mode-map (kbd "<") 'emms-volume-lower)
+(define-key emms-playlist-mode-map (kbd ">") 'emms-volume-raise)
+(put 'dired-find-alternate-file 'disabled nil)
+
+;; windmove
+(windmove-default-keybindings 'meta)
+
+;;;
+;;; Org-mode
+;;;
+(setq org-latex-default-packages-alist
+      '(("utf8" "inputenc" t) ("english,russian" "babel" t) ("" "cmap" t) ("" "indentfirst" t) ("" "verbatim" t)))
+(setq org-latex-with-hyperref nil)
+(setq org-link-frame-setup '((vm . vm-visit-folder-other-frame)
+			     (vm-imap . vm-visit-imap-folder-other-frame)
+			     (gnus . org-gnus-no-new-news)
+			     (file . find-file)
+			     (wl . wl-other-frame)))
+(setq org-html-head-extra "<style type='text/css'>body {background: #dddddd;} #content{ background: #ffffff; padding: 2em; width: 80%; max-width:1200px; margin-left: auto; margin-right: auto; border: 1px solid #888888;}</style>")
+(setq org-html-postamble "")
+(setq org-export-default-language "ru")
+(setq org-log-done t)
+
+;;;
+;;; Golang-mode
+;;;
+(require 'go-mode-autoloads)
+(add-hook 'before-save-hook 'gofmt-before-save)
+
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "firefox")
+
+
+;;;
+;;; C++ indent tab
+;;;
+(defun my-c-mode-hook ()
+  (setq c-basic-offset 4
+        tab-width 4
+        indent-tabs-mode t)
+
+  (c-set-offset 'substatement-open 0)
+  (fci-mode))
+
+(add-hook 'c++-mode-hook 'my-c-mode-hook)
+
+;;;
+;;; Gnus
+;;;
+(setq user-mail-address	"spline1986@yandex.ru"
+	  user-full-name "Andrew Lobanov")
+(setq gnus-select-method '(nnml ""))
+(setq mail-sources '((pop :server "pop.yandex.ru"
+                          :user "spline1986@yandex.ru"
+                          :password "zonycxyv")))
+(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+(setq gnus-mime-display-multipart-related-as-mixed t)
+(setq gnus-auto-select-first nil)
+
+;;;
+;;; PDF-tools
+;;;
+(require 'let-alist)
+(require 'tablist)
+(require 'pdf-tools)
+(require 'pdf-occur)
+(require 'pdf-history)
+(require 'pdf-links)
+(require 'pdf-outline)
+(require 'pdf-annot)
+(require 'pdf-sync)
+(pdf-tools-install)
+(add-hook 'pdf-tools-enabled-hook 'pdf-view-midnight-minor-mode)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+	("fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
+ '(erc-interpret-mirc-color t)
+ '(erc-pcomplete-nick-postfix ",")
+ '(erc-user-full-name "Andrew Lobanov")
+ '(ledger-reports
+   (quote
+	(("balance" "ledger balance")
+	 ("bal" "%(binary) -f %(ledger-file) bal")
+	 ("reg" "%(binary) -f %(ledger-file) reg")
+	 ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+	 ("account" "%(binary) -f %(ledger-file) reg %(account)"))))
+ '(send-mail-function (quote mailclient-send-it))
+ '(tab-width 4)
+ '(telega-msg-rainbow-title nil))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-scrollbar-bg ((t (:background "#fdf6e3"))))
+ '(company-scrollbar-fg ((t (:background "#657b83"))))
+ '(company-tooltip ((t (:background "#fdf6e3" :foreground "#839496"))))
+ '(company-tooltip-annotation ((t (:foreground "#dc322f"))))
+ '(company-tooltip-annotation-selection ((t (:foreground "#eee8d5"))))
+ '(company-tooltip-common ((t (:foreground "#dc322f"))))
+ '(company-tooltip-common-selection ((t (:foreground "#eee8d5"))))
+ '(company-tooltip-selection ((t (:background "#657b83" :foreground "#eee8d5"))))
+ '(nobreak-space ((t nil)))
+ '(slime-inspector-action-face ((t (:inherit font-lock-builtin-face))))
+ '(slime-repl-inputed-output-face ((t (:inherit font-lock-preprocessor-face))))
+ '(telega-msg-heading ((t (:inherit (quote font-lock-builtin-face))))))
+
+;(toggle-frame-maximized)
