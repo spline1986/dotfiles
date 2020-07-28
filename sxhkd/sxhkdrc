@@ -1,0 +1,86 @@
+super + shift + q
+	bspc node -c
+
+super + d
+    rofi -show run
+
+super + shift + d
+    rofi -show drun
+
+super + shift + m
+	~/.config/sxhkd/menu.sh
+
+super + Return
+	urxvt
+
+super + shift + Return
+	urxvt -fn "xft:Iosevka:size=14" -fb "xft:Iosevka:size=14"
+
+super + shift + n
+	urxvt -uc -fg "#c5a001" -fn "xft:Iosevka:size=16" -fb "xft:Iosevka:size=16"
+
+super + c
+	xdotool mousemove 1366 768
+
+super + {h, j, k, l}
+	bspc node -f {west,south,north,east}
+
+super + semicolon
+	bspc node -f next.local
+
+super + shift + {h, j, k, l}
+	bspc node -s {west,south,north,east}
+
+super + {1,2,3,4,5,6,7,8,9,0,minus,equal}
+	bspc desktop -f "^{1-9,10,11,12}"
+
+super + shift + {1,2,3,4,5,6,7,8,9,0,minus,equal}
+	bspc node --to-desktop "^{1-9,10,11,12}" --focus
+
+super + {v,r,p}
+	bspc node -p {east,south,cancel}
+
+super + {t,shift + t,f,shift + space}
+	bspc node -t {tiled,pseudo_tiled,fullscreen,floating}
+
+super + m
+	bspc desktop -l {monocle,tiled}
+
+super + shift + o
+	i3lock -c "#000000"
+
+XF86MonBrightness{Down,Up}
+	sudo brightnessctl s {1%-,+1%}
+
+XF86Audio{Lower,Raise}Volume
+    pamixer {-d,-i} 5
+
+XF86AudioMute
+    pamixer -t
+
+XF86TouchpadToggle
+	~/.config/sxhkd/lock_touch.sh
+
+super + shift + p
+    deadbeef --toggle-pause
+
+super + shift + g
+	bspc config window_gap {0, 8,16,24,32}
+
+super + e
+	bspc node -t pseudo_tiled
+
+super + shift + e
+	bspc quit
+
+super + y
+	bspc node newest.marked.local -n newest.!automatic.local
+
+super + g
+	bspc node -s biggest.tiled.local
+
+super + s
+	scrot "/home/spline/docs/pics/screenshots/screen_%Y%m%d_%H%M%S.png" -u -e 'optipng $f'
+
+super + shift + s
+	scrot "/home/spline/docs/pics/screenshots/screen_%Y%m%d_%H%M%S.png" -e 'optipng $f'

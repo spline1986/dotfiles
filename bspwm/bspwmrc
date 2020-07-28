@@ -1,0 +1,29 @@
+#!/bin/bash
+
+~/.config/bspwm/setwallpaper.sh &
+xsetroot -cursor_name left_ptr
+setxkbmap -layout "us,ru(winkeys)" -option grp:caps_toggle,grp_led:caps
+sxhkd &
+polybar top &
+
+bspc monitor -d im web media emacs file other code gfx mail down vm games
+
+bspc config border_width         2
+bspc config window_gap           8
+
+bspc config split_ratio          0.5
+
+bspc rule -a TelegramDesktop desktop="^1"
+bspc rule -a Discord desktop="^1"
+bspc rule -a firefox desktop="^2"
+bspc rule -a URxvt:ncmpcpp desktop="^3"
+bspc rule -a Deadbeef desktop="^3"
+bspc rule -a Emacs desktop="^4"
+bspc rule -a Emacs state=fullscreen
+bspc rule -a QtCreator desktop="^7"
+bspc rule -a Gimp desktop="^8"
+bspc rule -a Geeqie desktop="^8"
+bspc rule -a FUSE desktop="^11"
+bspc rule -a URxvt:nethack desktop="^12"
+bspc rule -a sdl-instead desktop="^12"
+

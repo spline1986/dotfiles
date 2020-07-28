@@ -1,0 +1,159 @@
+[colors]
+background = #0e1621
+foreground = #7b8da0
+primary = #4973a8
+underline = #5983b8
+secondary = #e60053
+alert-bg = #900000
+alert-fg = #ffffff
+
+[bar/top]
+width = 100%
+height = 22
+radius = 0
+fixed-center = true
+bottom = false
+locale = ru_RU.UTF-8
+enable-ipc = true
+override-redirect = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 1
+line-color = #f00
+
+border-size = 0
+border-color = #00000000
+
+padding-left = 0
+padding-right = 2
+offset-y = 0
+
+module-margin-left = 0
+module-margin-right = 0
+
+separator = │
+
+font-0 = Iosevka:size=11;4
+
+modules-left = bspwm
+#modules-center = date
+modules-right = xkeyboard battery pulseaudio date
+
+wm-restack = bspwm
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+tray-position = none
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+format-prefix-foreground = ${colors.foreground}
+
+label-layout = "%layout%"
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-background = ${colors.secondary}
+
+[module/filesystem]
+type = internal/fs
+interval = 10
+spacing = 0
+fixed-values = true
+
+mount-0 = /
+mount-1 = /home
+
+label-mounted = " %mountpoint%: %free% "
+label-unmounted = %mountpoint%: not mounted
+label-unmounted-foreground = ${colors.foreground}
+
+[module/bspwm]
+type = internal/bspwm
+
+format = <label-state> [<label-mode>]
+label-monocle = M
+label-tiled = T
+label-fullscreen = F
+label-floating = f
+label-pseudotiled = P
+label-locked = L
+;label-locked-foreground = #bd2c40
+label-sticky = S
+;label-sticky-foreground = #fba922
+label-private = p
+;label-private-foreground = #bd2c40
+label-marked = M
+
+label-focused = "%name%"
+label-focused-overline = ${colors.underline}
+label-focused-foreground = ${colors.primary}
+label-focused-padding = 1
+
+label-occupied = "%name%"
+label-occupied-padding = 1
+
+label-urgent = "%name%"
+label-urgent-background = ${colors.alert-bg}
+label-urgent-foreground = ${colors.alert-fg}
+label-urgent-padding = 1
+
+label-empty = 
+label-empty-foreground = ${colors.foreground}
+label-empty-padding = 1
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix-foreground = ${colors.foreground}
+label = " CPU: %percentage:2%%"
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix-foreground = ${colors.foreground}
+label = " MEM: %percentage_used%% "
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = "%Y.%m.%d %a"
+date-alt = "%Y.%m.%d %a"
+
+time = "%H:%M"
+time-alt = "%H:%M"
+
+format-prefix-foreground = ${colors.foreground}
+
+label = " %date% %time%"
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = AC0
+full-at = 98
+
+time-format=%H:%M
+
+label-charging = " BAT: %percentage%% [%time%] "
+label-discharging = " BAT: %percentage%% [%time%] "
+label-full = " BAT: %percentage%% "
+
+format-discharging = <ramp-capacity> <label-discharging>
+
+ramp-capacity-0 =
+
+[module/pulseaudio]
+type = internal/pulseaudio
+label-volume = " VOL: %percentage%% "
+label-muted = " VOL: muted "
